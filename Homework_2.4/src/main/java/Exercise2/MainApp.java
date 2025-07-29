@@ -1,9 +1,7 @@
 package Exercise2;
 
 public class MainApp {
-    static double num;
-
-    public static void main(String[] args) {
+  public static void main(String[] args) {
         // Треугольники
             // Triangle impossibleTriangle1 = new Triangle(-5, 1, -0.4); // отрицательные значения сторон
             // Triangle impossibleTriangle2 = new Triangle(6, 2.12, 3.45 ); // третья сторона больше двух других
