@@ -16,11 +16,7 @@ public class Rectangle implements Shape {
     Rectangle(double side13, double side24) {
         if ( !(side13 > 0) || !(side24 > 0) ) {
             System.out.println("Отрицательные значения сторон прямоугольника");
-            try {
-                throw new IllegalArgumentException("Такого прямоугольника не существует");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Такого прямоугольника не существует");
         }
 
         this.side13 = side13;

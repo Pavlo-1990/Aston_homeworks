@@ -22,11 +22,7 @@ public abstract class Animal implements Runnable, Swimable { // "Все живо
             System.out.println(getClass().getSimpleName() + " " + getName() +
                     ": животное не способно пробежать за раз свыше " + getLengthMaxRun() + " м.");
         } else {
-            try {
-                throw new IllegalArgumentException("Аргумент length должен быть положительным числом.");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Аргумент length должен быть положительным числом.");
         }
     }
 
@@ -38,11 +34,7 @@ public abstract class Animal implements Runnable, Swimable { // "Все живо
             System.out.println(getClass().getSimpleName() + " " + getName() +
                     ": животное не способно проплыть за раз свыше " + getLengthMaxSwim() + " м.");
         } else {
-            try {
-                throw new IllegalArgumentException("Аргумент length должен быть положительным числом.");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Аргумент length должен быть положительным числом.");
         }
     }
 

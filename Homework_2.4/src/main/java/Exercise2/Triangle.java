@@ -24,20 +24,12 @@ public class Triangle implements Shape {
     public Triangle(double side1, double side2, double side3) {
         if (!(side1 > 0) || !(side2 > 0) || !(side3 > 0)) {
             System.out.println("Отрицательные значения сторон треугольника");
-            try {
-                throw new IllegalArgumentException("Такого треугольника не существует");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Такого треугольника не существует");
         }
 
         if (!((side1 + side2 > side3) && (side1 + side3 > side2) && (side2 + side3 > side1))) {
             System.out.println("Третья сторона треугольника больше двух других");
-            try {
-                throw new IllegalArgumentException("Такого треугольника не существует");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Такого треугольника не существует");
         }
 
         this.side1 = side1;

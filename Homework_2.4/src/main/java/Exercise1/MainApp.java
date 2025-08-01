@@ -38,6 +38,7 @@ public class MainApp {
             // dog2.swim(-20); // вызов исключения IllegalArgumentException
         dog3.swim(10);
         dog4.swim(11);
+
             // cat1.swim(100); // вызов исключения IllegalArgumentException
             // cat2.swim(-7100); // вызов исключения IllegalArgumentException
 

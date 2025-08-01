@@ -16,11 +16,7 @@ public class Circle implements Shape {
     public Circle(double radius) {
         if ( !(radius > 0) ) {
             System.out.println("Отрицательное значение радиуса окружности");
-            try {
-                throw new IllegalArgumentException("Такой окружности (круга) не существует");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("Такой окружности (круга) не существует");
         }
 
         this.radius = radius;

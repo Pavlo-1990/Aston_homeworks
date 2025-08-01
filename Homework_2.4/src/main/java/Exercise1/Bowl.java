@@ -7,11 +7,7 @@ public class Bowl {
     public Bowl(int foodAmount){
         if (foodAmount <= 0){
             System.out.println("В миске должна быть еда. Вы ввели неположительное число");
-            try {
-                throw new IllegalArgumentException("В миске должна быть еда. Вы ввели неположительное число");
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
+            throw new IllegalArgumentException("В миске должна быть еда. Вы ввели неположительное число");
         }
 
         this.foodAmount = foodAmount;
