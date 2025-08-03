@@ -28,10 +28,10 @@ public class MainApp {
         System.out.println();
 
     // Код для аварийного завершения с MyArraySizeException
-        String[][] strTwoDecArrSize = new String[10][strTwoDecArrCorrect.length];
+        String[][] strTwoDecArrSize = new String[4][10];
 
     // Код для аварийного завершения с MyArrayDataException в методе
-        String[][] strTwoDecArrData = new String[strTwoDecArrCorrect.length][strTwoDecArrCorrect.length];
+        String[][] strTwoDecArrData = new String[4][4];
 
         // Копирование двумерных массивов по значению
         for(int i = 0; i < strTwoDecArrCorrect.length; i++){
