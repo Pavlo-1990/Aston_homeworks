@@ -13,7 +13,7 @@ public class MainApp {
             checkSizeTwoDecArr(strTwoDecArrCorrect);
         } catch (MyArraySizeException masEx){
             throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
-                    "Выбранный массив этому не соответствует. Необходимо выбрать подходящий массив.\n");
+                    "Выбранный массив этому не соответствует.\n");
         }
 
         Random rand = new Random(); // генератор целых чисел типа int
@@ -45,7 +45,7 @@ public class MainApp {
             // checkSizeTwoDecArr(strTwoDecArrSize); // проверка на соответствие размерности массива
         } catch (MyArraySizeException masEx){
             throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
-                    "Выбранный массив этому не соответствует. Необходимо выбрать подходящий массив.\n");
+                    "Выбранный массив этому не соответствует.\n");
         }
 
     // Код для аварийного завершения с MyArrayDataException в методе
@@ -55,7 +55,7 @@ public class MainApp {
             checkSizeTwoDecArr(strTwoDecArrData); // проверка на соответствие размерности массива
         } catch (MyArraySizeException masEx){
             throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
-                    "Выбранный массив этому не соответствует. Необходимо выбрать подходящий массив.\n");
+                    "Выбранный массив этому не соответствует.\n");
         }
 
         // Копирование двумерных массивов по значению
@@ -87,11 +87,15 @@ public class MainApp {
 
 // проверка размерности двумерного массива
     public static void checkSizeTwoDecArr(String[][] strTwoDecArr) {
-        if ((strTwoDecArr.length != 4) || (strTwoDecArr[0].length != 4)) {
-            System.out.println("Неподходящий массив");
-            throw new MyArraySizeException("Данный текст в консоль не выводится. Исключение пробросится в метод main()");
+        for (int i = 0; i < strTwoDecArr.length; i++) {
+           if ((strTwoDecArr.length != 4) || (strTwoDecArr[i].length != 4)) {
+                System.out.println("Неподходящий двумерный массив");
+                throw new MyArraySizeException("Данный текст в консоль не выводится. Исключение пробросится в метод main()");
+           }
         }
     }
+
+
 
 // преобразование строк двумерного массива в целочисленные значения типа int, а также суммирование этих значений
     public static void initTwoDecArr(String[][] strTwoDecArr){
