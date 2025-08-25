@@ -5,19 +5,9 @@ import java.util.Random;
 
 public class MainApp {
     public static void main(String[] args) {
-    // Создание массива с корректными данными
+    // СОЗДАНИЕ МАССИВА С КОРРЕКТНЫМИ ДАННЫМИ
         String[][] strTwoDecArrCorrect = new String[4][4]; // массив с корректным завершением
-
-        // Проверка двумерного массива на соответствие размерности 4x4
-        try {
-            checkSizeTwoDecArr(strTwoDecArrCorrect);
-        } catch (MyArraySizeException masEx){
-            throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
-                    "Выбранный массив этому не соответствует.\n");
-        }
-
         Random rand = new Random(); // генератор целых чисел типа int
-        Object obj = new Object();
 
         // Инициализация корректного двумерного массива типа String строками в виде целочисленных данных от 0 до 100
         for (int i = 0; i < strTwoDecArrCorrect.length; i++) {
@@ -26,8 +16,19 @@ public class MainApp {
             }
         }
 
-        // Вывод корректного двумерного массива в консоль
-        System.out.println("Двумерный массив типа String:");
+        // Проверка двумерного массива на соответствие размерности 4x4, преобразование в int и суммирование его элементов
+        try {
+            checkSizeAndInitTwoDecArr(strTwoDecArrCorrect);
+        } catch (MyArraySizeException masEx){
+            throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
+                    "Выбранный массив этому не соответствует.\n");
+        } catch (MyArrayDataException madEx) {
+            System.out.println("Преобразование в int не удалось");
+            madEx.printStackTrace();
+        }
+
+        // Вывод корректного двумерного массива 4x4 в консоль
+        System.out.println("Двумерный массив 4×4 типа String:");
 
         for (String[] s : strTwoDecArrCorrect) {
             System.out.print(Arrays.toString(s) + " ");
@@ -36,27 +37,30 @@ public class MainApp {
 
         System.out.println();
 
-    // Код для аварийного завершения с MyArraySizeException
+
+    // КОД ДЛЯ АВАРИЙНОГО ЗАВЕРШЕНИЯ С MyArraySizeException
         String[][] strTwoDecArrSize = new String[4][10];
 
-        // метод с массивом для аварийного завершения с MyArraySizeException
+        // Инициализация
+        for (int i = 0; i < strTwoDecArrSize.length; i++) {
+            for (int j = 0; j < strTwoDecArrSize[i].length; j++) {
+                strTwoDecArrSize[i][j] = String.valueOf(rand.nextInt(101));
+            }
+        }
+
+        // Вызов метода, содержащий в себе массив, для аварийного завершения с MyArraySizeException
         try {
-            // сработает исключение
-            // checkSizeTwoDecArr(strTwoDecArrSize); // проверка на соответствие размерности массива
+            // checkSizeAndInitTwoDecArr(strTwoDecArrSize);
         } catch (MyArraySizeException masEx){
             throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
                     "Выбранный массив этому не соответствует.\n");
+        } catch (MyArrayDataException madEx) {
+            System.out.println("Преобразование в int не удалось");
+            madEx.printStackTrace();
         }
 
-    // Код для аварийного завершения с MyArrayDataException в методе
+    // КОД ДЛЯ АВАРИЙНОГО ЗАВЕРШЕНИЯ С MyArrayDataException
         String[][] strTwoDecArrData = new String[4][4];
-
-        try {
-            checkSizeTwoDecArr(strTwoDecArrData); // проверка на соответствие размерности массива
-        } catch (MyArraySizeException masEx){
-            throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
-                    "Выбранный массив этому не соответствует.\n");
-        }
 
         // Копирование двумерных массивов по значению
         for(int i = 0; i < strTwoDecArrCorrect.length; i++){
@@ -67,38 +71,39 @@ public class MainApp {
         strTwoDecArrData[0][2] = "Наличие нецифровых символов в String[0][2]"; // исключение сработает здесь
         strTwoDecArrData[3][0] = "Наличие нецифровых символов в String[3][0]";
 
-    // Вызов метода для преобразования в int и суммирования
         try {
-            initTwoDecArr(strTwoDecArrCorrect); // метод с массивом для корректного завершения
-            //initTwoDecArr(strTwoDecArrData); // метод с массивом для аварийного завершения с MyArrayDataException
-            //callAioobException(); // метод с массивом для аварийного завершения с ArrayIndexOutOfBoundsException
+            // checkSizeAndInitTwoDecArr(strTwoDecArrData);
+        } catch (MyArraySizeException masEx){
+            throw new MyArraySizeException("Размер двумерного массива должен быть 4×4. " +
+                    "Выбранный массив этому не соответствует.\n");
         } catch (MyArrayDataException madEx) {
+            System.out.println("Преобразование в int не удалось");
             madEx.printStackTrace();
+        }
+
+    // КОД ДЛЯ АВАРИЙНОГО ЗАВЕРШЕНИЯ С ArrayIndexOutOfBoundsException
+        try {
+            // callAioobException();
         } catch (ArrayIndexOutOfBoundsException aioobEx) {
             System.out.println("Была совершена попытка обратиться к несуществующему элементу двумерного массива за его пределами.\n");
             aioobEx.printStackTrace();
-        } finally {
-            System.out.println("Вызовы всех двух исключений происходят в методе main(), так как все возможные неполадки берут\n" +
-                    "своё начало из кода этого метода, за исправление которого отвечают только те разработчики,\n" +
-                    "которые работают с main().\n"
-            );
         }
     }
 
-// проверка размерности двумерного массива
-    public static void checkSizeTwoDecArr(String[][] strTwoDecArr) {
+// ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ КЛАССА
+    // Проверка двумерного массива на соответствие размерности 4x4, преобразование в int и суммирование его элементов
+    public static void checkSizeAndInitTwoDecArr(String[][] strTwoDecArr) {
+        // проверка размерности двумерного массива
         for (int i = 0; i < strTwoDecArr.length; i++) {
-           if ((strTwoDecArr.length != 4) || (strTwoDecArr[i].length != 4)) {
+            if ((strTwoDecArr.length != 4) || (strTwoDecArr[i].length != 4)) {
                 System.out.println("Неподходящий двумерный массив");
                 throw new MyArraySizeException("Данный текст в консоль не выводится. Исключение пробросится в метод main()");
-           }
+            }
         }
-    }
 
+        System.out.println("Массив соответствует размерности 4×4.");
 
-
-// преобразование строк двумерного массива в целочисленные значения типа int, а также суммирование этих значений
-    public static void initTwoDecArr(String[][] strTwoDecArr){
+        // преобразование строк двумерного массива в целочисленные значения типа int, а также суммирование этих значений
         int sum = 0;
 
         for (int i = 0; i < strTwoDecArr.length; i++) {
@@ -115,7 +120,7 @@ public class MainApp {
                 "размера 4×4 составляет " + sum + ".\n");
     }
 
-    // Код для аварийного завершения с ArrayIndexOutOfBoundsException
+    // Метод, содержащий в себе массив, для аварийного завершения с ArrayIndexOutOfBoundsException
     public static void callAioobException() throws ArrayIndexOutOfBoundsException {
         String[][] strTwoDecArrBound = new String[4][4];
         strTwoDecArrBound[4][0] = "За пределами первоначальной размерности двумерного массива";
