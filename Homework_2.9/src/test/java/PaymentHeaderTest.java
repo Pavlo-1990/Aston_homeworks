@@ -46,6 +46,5 @@ public class PaymentHeaderTest {
 
         assertEquals("h2", elementHeader.getTagName(), "Тег не совпал");
         assertTrue(elementHeader.isDisplayed()); // проверка отображение заголовка
-        System.out.println(elementHeader.getText());
     }
 }
