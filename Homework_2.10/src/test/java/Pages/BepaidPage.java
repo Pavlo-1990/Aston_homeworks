@@ -13,13 +13,8 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Tag("Iframe")
 @DisplayName("Окно «Реквизиты банковской карты»")
@@ -33,61 +28,43 @@ public class BepaidPage {
     @FindBy(xpath = "//*[@class='cards-brands cards-brands__container ng-tns-c891095944-0 ng-trigger ng-trigger-brandsState ng-star-inserted']//img")
     private List<WebElement> listLogo;
 
-    List<String> namesLogoList;
+    private WebElement bepaidSumHeader; // заголовок: сумма оплаты
+    private WebElement bepaidPhoneHeader; //  заголовок: номер телефона
+    private WebElement bepaidSumButtonDisabled; // кнопка «Оплатить» (состояние disabled)
+    private List<String> namesLogoList;
 
-    public BepaidPage(WebDriver driver) {
+    public BepaidPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        this.wait = wait;
         this.actions = new Actions(driver);
         this.js = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this); // инициализация элементов аннотации @FindBy
     }
 
-// МЕТОДЫ ПРОВЕРКИ
-    @Description("Проверка заголовка: сумма оплаты")
-    public void sumHeader(String valueSum) {
-        WebElement bepaidSumHeader = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class = 'pay-description__cost']/span[contains(text(), '" + valueSum + ".00 BYN')]")));
-        assertEquals(valueSum + ".00 BYN", bepaidSumHeader.getText(),
-                "Ожидаемый результат текста суммы в заголовке не совпал с фактическим");
-        System.out.printf("Сумма оплаты в заголовке «%s» в порядке\n", bepaidSumHeader.getText());
+// ОЖИДАНИЕ ЗАГОЛОВКА И КНОПКИ «ОПЛАТИТЬ» (СОСТОЯНИЕ DISABLED)
+    @Description("Ожидание заголовка: сумма оплаты")
+    public WebElement sumHeader(String sumValue) {
+        bepaidSumHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class = 'pay-description__cost']/span[contains(text(), '" + sumValue + ".00 BYN')]")));
+        return bepaidSumHeader;
     }
 
-    @Description("Проверка заголовка: номер телефона")
-    public void phoneHeader(String valuePhone) {
-        WebElement bepaidPhoneHeader = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@class = 'pay-description__text']/span[contains(text(), 'Номер:375" + valuePhone + "')]")));
-
-        String fullText = bepaidPhoneHeader.getText();
-        int index = fullText.indexOf("Номер:375");
-        String phoneSubstring = fullText.substring(index);
-
-        assertEquals("Номер:375" + valuePhone, phoneSubstring,
-                "Ожидаемый результат текста номера телефона в заголовке не совпал с фактическим");
-        System.out.printf("Номер телефона в заголовке «%s» в порядке\n", phoneSubstring);
+    @Description("Ожидание заголовка: номер телефона")
+    public WebElement phoneHeader(String phoneValue) {
+        bepaidPhoneHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[@class = 'pay-description__text']/span[contains(text(), 'Номер:375" + phoneValue + "')]")));
+        return bepaidPhoneHeader;
     }
 
-    @Description("Проверка кнопки «Оплатить» (состояние disabled)")
-    public void SumButtonDisabled(String valueSum) {
-        WebElement bepaidSumButtonDisabled = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(
+    @Description("Ожидание кнопки «Оплатить» (состояние disabled)")
+    public WebElement SumButtonDisabled(String sumValue) {
+        bepaidSumButtonDisabled = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//button[@class = 'colored disabled']" +
-                        "[contains(text(), 'Оплатить') and contains(text(), '" + valueSum + ".00 BYN')]")));
-        assertEquals("Оплатить " + valueSum + ".00 BYN", bepaidSumButtonDisabled.getText(),
-                "Ожидаемый результат текста на кнопке не совпал с фактическим");
-        System.out.printf("Текст «%s» кнопки «Оплатить» (состояние disabled) в порядке\n", bepaidSumButtonDisabled.getText());
+                        "[contains(text(), 'Оплатить') and contains(text(), '" + sumValue + ".00 BYN')]")));
+        return bepaidSumButtonDisabled;
     }
 
-    @Description("Проверка плейсхолдеров полей ввода окна «Реквизиты банковской карты»")
-    public void assertPlaceholdersBepaid(Map<String, String> placeholdersBepaidMap){
-        for (Map.Entry<String, String> entry : placeholdersBepaidMap.entrySet()) {
-            String xpath = String.format("//input[@formcontrolname='%s']/following-sibling::label[text()='%s']", entry.getKey(), entry.getValue());
-            WebElement inputField = new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
-            assertEquals(entry.getValue(), inputField.getText(), String.format("Ожидаемый текст плейсхолдера «%s» не совпал с фактическим", entry.getValue()));
-            System.out.printf("Реквизиты банковской карты: плейсхолдер «%s» в порядке\n", entry.getValue());
-        }
-    }
-
-    // МЕТОДЫ ДЛЯ ПРОВЕРКИ ЛОГОТИПОВ
+// ЛОГОТИПЫ
     @Description("Идентификация логотипов")
     public void identityLogo(List<String> namesLogoList) {
         this.namesLogoList = namesLogoList;
@@ -107,29 +84,8 @@ public class BepaidPage {
         System.out.println();
     }
 
-    @Description("Проверка логотипов на соответствие требованиям")
-    public void assertLogo(List<String> namesLogoList, List<String> svgList) {
-        // Проверка значений URI-адресов
-        for (int i = 0; i < listLogo.size(); i++) {
-            assertEquals("https://checkout.bepaid.by/widget_v2/assets/images/payment-icons/card-types/" + svgList.get(i),
-                    listLogo.get(i).getAttribute("src"),
-                    "Ожидаемое название медиафайла с логотипом «" + svgList.get(i) + "» не совпало с фактическим");
-        }
-        System.out.println("Значения URI-адресов логотипов в порядке");
-
-        // Проверка значение тега «img»
-        for (WebElement logo : listLogo) {
-            assertEquals("img", logo.getTagName(), "Ожидаемый тег «img» не совпал с фактическим");
-        }
-        System.out.println("Тег «img» логотипов в порядке");
-
-        // Проверка отображения логотипа на экране
-        /* Логотипы карт «Мир» и «Maestro» сменяют друг друга, образуя анимационную последовательность */
-        int countAttempt = 1;
-        for (WebElement logo : listLogo) {
-            wait.until(ExpectedConditions.visibilityOf(logo));
-            assertTrue(logo.isDisplayed(), "Логотип по ссылке " + logo.getAttribute("src") + " не отобразился");
-        }
-        System.out.println("Все логотипы окна «Онлайн пополнение без комиссии» отобразились\n");
+    @Description("Возврат списка логотипов")
+    public List<WebElement> getListLogo(){
+        return listLogo;
     }
 }
